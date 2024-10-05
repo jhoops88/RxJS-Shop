@@ -1,5 +1,9 @@
 <p>product-list works!</p>
 
+@for (category of categories$ | async; track category) {
+    <p>{{category}}</p>
+}
+
 @for (product of products$ | async; track product.id) {
     <p>{{product.name}}</p>
 }

@@ -14,6 +14,7 @@ import { Product } from '../models/product.model';
 export class ProductListComponent implements OnInit {
   
   products$: Observable<Product[]>|null = null;
+  categories$: Observable<string[]>|null = null;
 
   constructor(
     private readonly productService: ProductService){
@@ -21,5 +22,6 @@ export class ProductListComponent implements OnInit {
     }
   ngOnInit(): void {
     this.products$ = this.productService.product$;
+    this.categories$ = this.productService.productCategories$;
   }
 }
