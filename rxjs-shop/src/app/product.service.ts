@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
-import { catchError, of } from 'rxjs';
-import { captureError } from 'rxjs/internal/util/errorContext';
+import { Observable, of } from 'rxjs';
+import { ProductApiStub } from './stubs/product-api-stub';
+import { Product } from './models/product.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
 
-  product$ = of(1,2,3,4);
+  product$: Observable<Product[]> = of(ProductApiStub.dummyProducts);
 
   constructor() { }
 }

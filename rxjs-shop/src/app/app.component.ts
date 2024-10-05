@@ -11,15 +11,7 @@ import { ProductListComponent } from './product-list/product-list.component';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent implements OnInit{
+export class AppComponent {
   title = 'rxjs-shop';
-  products$: Observable<number>|null = null;
-
-  constructor(
-    private readonly productService: ProductService){
-      
-    }
-  ngOnInit(): void {
-    this.products$ = this.productService.product$;
-  }
+  
 }
