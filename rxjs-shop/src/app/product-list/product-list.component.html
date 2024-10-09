@@ -1,8 +1,11 @@
 <p>product-list works!</p>
 
-@for (category of categories$ | async; track category) {
-    <p>{{category}}</p>
-}
+<select (change)="onCategorySelect($event.target)">
+        <option value="" disabled selected>Please select</option>
+        @for (category of categories$ | async; track category) {
+            <option [value]="category">{{ category }}</option>
+        }
+</select>
 
 @for (product of products$ | async; track product.id) {
     <p>{{product.name}}</p>

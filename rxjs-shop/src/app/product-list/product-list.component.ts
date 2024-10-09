@@ -20,8 +20,18 @@ export class ProductListComponent implements OnInit {
     private readonly productService: ProductService){
       
     }
-  ngOnInit(): void {
+  
+    ngOnInit(): void {
     this.products$ = this.productService.product$;
     this.categories$ = this.productService.productCategories$;
+  }
+
+  onCategorySelect(target: EventTarget | null) {
+    if (target instanceof HTMLSelectElement) {
+      const selectedCategory = target.value;
+      console.log('Selected category:', selectedCategory);
+      this.productService.selectedCategoryChanged(selectedCategory);
+      // You can now use the selected category as needed
+    }
   }
 }
