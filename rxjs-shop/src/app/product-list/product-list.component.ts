@@ -3,11 +3,12 @@ import { ProductService } from '../product.service';
 import { Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { Product } from '../models/product.model';
+import { ProductDetailComponent } from '../product-detail/product-detail.component';
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [AsyncPipe],
+  imports: [AsyncPipe, ProductDetailComponent],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.css'
 })

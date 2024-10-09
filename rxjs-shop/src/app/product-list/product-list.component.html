@@ -8,5 +8,5 @@
 </select>
 
 @for (product of products$ | async; track product.id) {
-    <p>{{product.name}}</p>
+    <app-product-detail [product]="product"></app-product-detail>
 }
