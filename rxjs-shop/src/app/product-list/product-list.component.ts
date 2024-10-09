@@ -4,11 +4,12 @@ import { Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { Product } from '../models/product.model';
 import { ProductDetailComponent } from '../product-detail/product-detail.component';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [AsyncPipe, ProductDetailComponent],
+  imports: [AsyncPipe, ProductDetailComponent, MatSelectModule],
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.css'
 })
@@ -27,12 +28,7 @@ export class ProductListComponent implements OnInit {
     this.categories$ = this.productService.productCategories$;
   }
 
-  onCategorySelect(target: EventTarget | null) {
-    if (target instanceof HTMLSelectElement) {
-      const selectedCategory = target.value;
-      console.log('Selected category:', selectedCategory);
-      this.productService.selectedCategoryChanged(selectedCategory);
-      // You can now use the selected category as needed
-    }
-  }
+  onCategorySelect(selectedCategory: string) {
+    this.productService.selectedCategoryChanged(selectedCategory);
+}
 }

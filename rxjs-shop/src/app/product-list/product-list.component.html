@@ -1,12 +1,18 @@
-<p>product-list works!</p>
+<div class="container">
+    <mat-form-field appearance="fill">
+        <mat-label>Please select a category</mat-label>
+        <mat-select (selectionChange)="onCategorySelect($event.value)">
+            @for (category of categories$ | async; track category) {
+                <mat-option [value]="category">
+                    {{ category }}
+                </mat-option>
+            }
+        </mat-select>
+    </mat-form-field>
 
-<select (change)="onCategorySelect($event.target)">
-        <option value="" disabled selected>Please select</option>
-        @for (category of categories$ | async; track category) {
-            <option [value]="category">{{ category }}</option>
+    <div class="product-list">
+        @for (product of products$ | async; track product.id) {
+            <app-product-detail [product]="product"></app-product-detail>
         }
-</select>
-
-@for (product of products$ | async; track product.id) {
-    <app-product-detail [product]="product"></app-product-detail>
-}
+    </div>
+</div>

@@ -1,0 +1,38 @@
+.container {
+    max-width: 1200px; /* Set a maximum width */
+    margin: 0 auto; /* Center the container */
+    padding: 16px; /* Add some padding */
+}
+
+.product-list {
+    display: flex; /* Or grid, depending on your layout choice */
+    flex-wrap: wrap;
+    justify-content: space-between; /* Adjust as needed */
+    gap: 16px; /* Space between items */
+}
+
+/* Adjust item styles as needed */
+app-product-detail {
+    flex: 1 1 calc(33.33% - 16px); /* Three items per row */
+    max-width: calc(33.33% - 16px);
+}
+
+mat-form-field {
+    width: 100%; /* Make it responsive */
+    margin-bottom: 16px; /* Space below the dropdown */
+}
+
+mat-label {
+    font-weight: bold; /* Make the label bold */
+}
+
+.mat-select {
+    background-color: #f9f9f9; /* Light background color */
+    border-radius: 4px; /* Rounded corners */
+}
+
+/* Optional: Change the color of the dropdown when focused */
+.mat-select:focus {
+    border-color: #3f51b5; /* Example primary color */
+}
+
