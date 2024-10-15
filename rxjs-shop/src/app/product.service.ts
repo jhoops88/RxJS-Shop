@@ -8,23 +8,7 @@ import { Product } from './models/product.model';
 })
 export class ProductService {
 
-  private allProduct$: Observable<Product[]> = of(ProductApiStub.dummyProducts);
-  
-  private searchSubject = new BehaviorSubject<string>('');
-  searchAction$ = this.searchSubject.asObservable();
-
-  productSearch$: Observable<Product[]> = this.searchAction$.pipe(
-    debounceTime(300),
-    switchMap(searchTerm => 
-      this.allProduct$.pipe(
-        mergeMap(products => of(...products)),
-        filter(product => product.name.includes(searchTerm) || product.description.includes(searchTerm)),
-        toArray()
-      )
-    )
-  );
-
-  productCategories$: Observable<string[]> = this.allProduct$.pipe(
+  productCategories$: Observable<string[]> = this.getProducts().pipe(
     mergeMap(products => of(...products)),
     distinct(product => product.category),
     map(product => product.category),
@@ -32,20 +16,20 @@ export class ProductService {
   );
 
   private categorySubject = new BehaviorSubject<string|null>(null);
-  categorySelectAction$ = this.categorySubject.asObservable();
+  private searchSubject = new BehaviorSubject<string>('');
 
   product$: Observable<Product[]> = combineLatest([
-    this.categorySelectAction$,
-    this.searchAction$
+    this.categorySubject.asObservable(),
+    this.searchSubject.asObservable().pipe(debounceTime(300))
   ]).pipe(
     switchMap(([catName, searchTerm]) => 
-      this.allProduct$.pipe(
-        mergeMap(products => of(...products)),
-        filter(product => 
+      this.getProducts().pipe(
+        map(products => products.filter(product => 
           (catName === null || product.category === catName) &&
-          (searchTerm === '' || product.name.includes(searchTerm) || product.description.includes(searchTerm))
-        ),
-        toArray()
+          (searchTerm === '' || 
+            product.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+            product.description.toLowerCase().includes(searchTerm.toLowerCase()))
+        ))
       )
     )
   );
@@ -58,6 +42,10 @@ export class ProductService {
 
   searchProducts(searchTerm: string): void {
     this.searchSubject.next(searchTerm);
+  }
+
+  private getProducts(): Observable<Product[]> {
+    return of(ProductApiStub.dummyProducts);
   }
 
 }
