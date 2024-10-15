@@ -1,18 +1,22 @@
 <div class="container">
     <mat-form-field appearance="fill">
+        <mat-label>Search Products</mat-label>
+        <input matInput #searchInput placeholder="Enter product name or description" (input)="searchProducts(searchInput.value)">
+        <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+    
+    <mat-form-field appearance="fill">
         <mat-label>Please select a category</mat-label>
         <mat-select (selectionChange)="onCategorySelect($event.value)">
-            @for (category of categories$ | async; track category) {
-                <mat-option [value]="category">
-                    {{ category }}
-                </mat-option>
-            }
+            <mat-option *ngFor="let category of categories$ | async" [value]="category">
+                {{ category }}
+            </mat-option>
         </mat-select>
     </mat-form-field>
 
     <div class="product-list">
-        @for (product of products$ | async; track product.id) {
+        <ng-container *ngFor="let product of products$ | async">
             <app-product-detail [product]="product"></app-product-detail>
-        }
+        </ng-container>
     </div>
 </div>

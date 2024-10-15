@@ -1,38 +1,64 @@
 .container {
-    max-width: 1200px; /* Set a maximum width */
-    margin: 0 auto; /* Center the container */
-    padding: 16px; /* Add some padding */
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 16px;
 }
 
 .product-list {
-    display: flex; /* Or grid, depending on your layout choice */
+    display: flex;
     flex-wrap: wrap;
-    justify-content: space-between; /* Adjust as needed */
-    gap: 16px; /* Space between items */
+    justify-content: space-between;
+    gap: 16px;
 }
 
-/* Adjust item styles as needed */
 app-product-detail {
-    flex: 1 1 calc(33.33% - 16px); /* Three items per row */
+    flex: 1 1 calc(33.33% - 16px);
     max-width: calc(33.33% - 16px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    transition: transform 0.2s;
+}
+
+app-product-detail:hover {
+    transform: scale(1.02);
 }
 
 mat-form-field {
-    width: 100%; /* Make it responsive */
-    margin-bottom: 16px; /* Space below the dropdown */
+    width: 100%;
+    margin-bottom: 16px;
 }
 
 mat-label {
-    font-weight: bold; /* Make the label bold */
+    font-weight: bold;
 }
 
-.mat-select {
-    background-color: #f9f9f9; /* Light background color */
-    border-radius: 4px; /* Rounded corners */
+.mat-select, mat-input {
+    background-color: #f9f9f9;
+    border-radius: 4px;
 }
 
-/* Optional: Change the color of the dropdown when focused */
-.mat-select:focus {
-    border-color: #3f51b5; /* Example primary color */
+.mat-form-field.mat-focused .mat-form-field-flex {
+    border-color: #3f51b5;
 }
 
+.mat-icon {
+    cursor: pointer;
+}
+
+.mat-input {
+    padding: 8px;
+}
+
+@media (max-width: 768px) {
+    app-product-detail {
+        flex: 1 1 calc(50% - 16px);
+        max-width: calc(50% - 16px);
+    }
+}
+
+@media (max-width: 480px) {
+    app-product-detail {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+}
