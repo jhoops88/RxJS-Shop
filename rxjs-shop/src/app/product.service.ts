@@ -17,19 +17,27 @@ export class ProductService {
 
   private categorySubject = new BehaviorSubject<string|null>(null);
   private searchSubject = new BehaviorSubject<string>('');
+  private sortSubject = new BehaviorSubject<string>('name');
 
   product$: Observable<Product[]> = combineLatest([
     this.categorySubject.asObservable(),
-    this.searchSubject.asObservable().pipe(debounceTime(300))
+    this.searchSubject.asObservable().pipe(debounceTime(300)),
+    this.sortSubject.asObservable()
   ]).pipe(
-    switchMap(([catName, searchTerm]) => 
+    switchMap(([catName, searchTerm, sortBy]) => 
       this.getProducts().pipe(
-        map(products => products.filter(product => 
-          (catName === null || product.category === catName) &&
-          (searchTerm === '' || 
-            product.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-            product.description.toLowerCase().includes(searchTerm.toLowerCase()))
-        ))
+        map(products => {
+          // Filter products based on category and search term
+          const filteredProducts = products.filter(product => 
+            (catName === null || product.category === catName) &&
+            (searchTerm === '' || 
+              product.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+              product.description.toLowerCase().includes(searchTerm.toLowerCase()))
+          );
+
+          // Sort the filtered products
+          return this.sortProducts(filteredProducts, sortBy);
+        })
       )
     )
   );
@@ -44,8 +52,25 @@ export class ProductService {
     this.searchSubject.next(searchTerm);
   }
 
+  changeSortOrder(sortBy: string): void {
+    this.sortSubject.next(sortBy);
+  }
+
   private getProducts(): Observable<Product[]> {
     return of(ProductApiStub.dummyProducts);
+  }
+
+  private sortProducts(products: Product[], sortBy: string): Product[] {
+    return [...products].sort((a, b) => {
+      switch (sortBy) {
+        case 'name':
+          return a.name.localeCompare(b.name);
+        case 'price':
+          return a.price - b.price;
+        default:
+          return 0;
+      }
+    });
   }
 
 }

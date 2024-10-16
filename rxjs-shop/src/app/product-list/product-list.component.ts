@@ -37,4 +37,8 @@ export class ProductListComponent implements OnInit {
   searchProducts(searchTerm: string): void {
     this.productService.searchProducts(searchTerm); // Update the search term
   }
+
+  changeSortOrder(sortByName: string): void {
+    this.productService.changeSortOrder(sortByName); // Update the search term
+  }
 }
