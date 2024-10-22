@@ -1,8 +1,17 @@
 <div class="container">
     <mat-form-field appearance="fill">
         <mat-label>Search Products</mat-label>
-        <input matInput #searchInput placeholder="Enter product name or description" (input)="searchProducts(searchInput.value)">
+        <input matInput #searchInput placeholder="Enter product name or description" (input)="onSearchChange(searchInput.value)">
         <mat-icon matSuffix>search</mat-icon>
+
+        <!-- Suggestions Dropdown -->
+        <ng-container *ngIf="searchSuggestions$ | async as suggestions">
+            <mat-option *ngIf="suggestions.length > 0" class="suggestion-list">
+                <ng-container *ngFor="let suggestion of suggestions">
+                    <mat-option (click)="onSelectSuggestion(suggestion)" [value]="suggestion">{{ suggestion }}</mat-option>
+                </ng-container>
+            </mat-option>
+        </ng-container>
     </mat-form-field>
     
     <mat-form-field appearance="fill">

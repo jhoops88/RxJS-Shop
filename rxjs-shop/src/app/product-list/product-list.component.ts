@@ -18,6 +18,7 @@ export class ProductListComponent implements OnInit {
   
   products$: Observable<Product[]>|null = null;
   categories$: Observable<string[]>|null = null;
+  searchSuggestions$: Observable<string[]>|null = null;
 
   constructor(
     private readonly productService: ProductService){
@@ -27,18 +28,22 @@ export class ProductListComponent implements OnInit {
     ngOnInit(): void {
     this.products$ = this.productService.product$;
     this.categories$ = this.productService.productCategories$;
-    // this.productService.searchProducts('laptop');
+    this.searchSuggestions$ = this.productService.searchSuggestions$;
   }
 
   onCategorySelect(selectedCategory: string) {
     this.productService.selectedCategoryChanged(selectedCategory);
   }
 
-  searchProducts(searchTerm: string): void {
-    this.productService.searchProducts(searchTerm); // Update the search term
+  onSelectSuggestion(suggestion: string) {
+    this.productService.searchProducts(suggestion);
+  }
+
+  onSearchChange(searchTerm: string): void {
+    this.productService.searchProducts(searchTerm);
   }
 
   changeSortOrder(sortByName: string): void {
-    this.productService.changeSortOrder(sortByName); // Update the search term
+    this.productService.changeSortOrder(sortByName);
   }
 }

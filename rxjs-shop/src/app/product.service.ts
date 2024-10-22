@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject, combineLatest, debounceTime, distinct, filter, from, map, mergeMap, of, switchMap, toArray } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, combineLatest, debounceTime, distinct, filter, from, map, mergeMap, of, startWith, switchMap, toArray } from 'rxjs';
 import { ProductApiStub } from './stubs/product-api-stub';
 import { Product } from './models/product.model';
 
@@ -19,6 +19,26 @@ export class ProductService {
   private searchSubject = new BehaviorSubject<string>('');
   private sortSubject = new BehaviorSubject<string>('name');
 
+  searchSuggestions$: Observable<string[]> = this.searchSubject.pipe(
+    debounceTime(300),
+    switchMap(term => {
+      if (term.length < 2) {
+        return of([]);
+      }
+      return this.getProducts().pipe(
+        map(products => 
+          products
+            .filter(product => 
+              product.name.toLowerCase().includes(term.toLowerCase()) ||
+              product.description.toLowerCase().includes(term.toLowerCase())
+            )
+            .map(product => product.name)
+        )
+      );
+    }),
+    startWith([])
+  );
+
   product$: Observable<Product[]> = combineLatest([
     this.categorySubject.asObservable(),
     this.searchSubject.asObservable().pipe(debounceTime(300)),
@@ -27,7 +47,6 @@ export class ProductService {
     switchMap(([catName, searchTerm, sortBy]) => 
       this.getProducts().pipe(
         map(products => {
-          // Filter products based on category and search term
           const filteredProducts = products.filter(product => 
             (catName === null || product.category === catName) &&
             (searchTerm === '' || 
@@ -35,14 +54,11 @@ export class ProductService {
               product.description.toLowerCase().includes(searchTerm.toLowerCase()))
           );
 
-          // Sort the filtered products
           return this.sortProducts(filteredProducts, sortBy);
         })
       )
     )
   );
-
-  constructor() { }
 
   selectedCategoryChanged(categoryName: string): void {
     this.categorySubject.next(categoryName);
